@@ -1,5 +1,5 @@
 # Social-Login-With-Hapi
-The source code provided is an example of how to setup social login functionality into your node application. 
+The source code provided is an example of how to setup social login functionality into your node application.
 
 # Dependencies
 The backend will use the following technologies and frameworks:
@@ -14,3 +14,14 @@ You can find the blog article related to this code here [social-login-with-hapi]
 License
 =========
 MIT [http://rem.mit-license.org](http://rem.mit-license.org)
+
+
+## Setting up
+
+Install hapi, bell & hapi-auth-cookie
+
+`npm install hapi`
+
+`npm install bell`
+
+`npm install hapi-auth-cookie`
