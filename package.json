@@ -1,0 +1,22 @@
+{
+  "name": "social-login-with-hapi",
+  "version": "0.0.1",
+  "description": "An example of social login using the Hapi framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "hapi",
+    "auth",
+    "social",
+    "login"
+  ],
+  "author": "Salim Kapadia <salimk786@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bell": "^1.1.0",
+    "hapi": "^6.7.1",
+    "hapi-auth-cookie": "^1.3.2"
+  }
+}
