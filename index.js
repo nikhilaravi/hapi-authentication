@@ -1,6 +1,3 @@
-/**
- * Dependencies.
- */
 
 var Hapi = require("hapi");
 var Bell = require('bell');
