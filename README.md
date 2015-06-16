@@ -1,4 +1,6 @@
 # Authentication
+
+[![Join the chat at https://gitter.im/nikhilaravi/hapi-authentication](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/nikhilaravi/hapi-authentication?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 This is a readme designed to inform the FAC5 course about authentication issues associated with web design and development, as well as a working example of authentication that uses Google's API on a HAPI framework.
 
 ###Map
