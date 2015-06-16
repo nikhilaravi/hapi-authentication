@@ -16,7 +16,7 @@
 ``` js
 server.register([array of plugin objects], callback)
 // e.g.
-server.register([require('bell', require('somePlugin'))], callback)
+server.register([require('bell'), require('somePlugin'))], callback)
 
 ```
 * Each object in the array must implement a 'register function' which will be called and supplied the current hapi server object (if using npm plugins they already have a register function)
