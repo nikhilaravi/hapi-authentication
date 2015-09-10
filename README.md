@@ -1,5 +1,5 @@
 # Authentication
-This is a readme designed to inform the FAC5 course about authentication issues associated with web design and development, as well as a working example of authentication that uses Google's API on a HAPI framework.
+This is a readme designed to inform the FAC5 course about authentication issues associated with web design and development, as well as a working example of authentication that uses GitHub's API on a HAPI framework.
 
 ###Map
 
@@ -29,11 +29,17 @@ The backend will use the following technologies and frameworks:
   - [Node-HapiJS](https://github.com/hapijs/hapi)
   - [Node-Bell](https://github.com/hapijs/bell)
 
-  #3rd party authentication using hapi plugins
-  * Bell to do the OAuth authenitcation with the provider
+##Tutorial!
+
+We'll be using:
+
+  * Bell to do the OAuth authentication with the provider
   * hapi-auth-cookie to save the user’s profile information into an encrypted cookie which can be used throughout the rest of the application to determine the authentication status.
 
-  ##Endpoints
+Follow each step of the tutorial in the Tutorial Folder to build up your auth code. Step 3 contains the full code for authentication. 
+
+
+##Endpoints
 
   * / - can be accessed with or without authentication
   * /login  - authenticates with 3rd party provider
@@ -41,7 +47,7 @@ The backend will use the following technologies and frameworks:
   * /logout - clears session authentication
 
 
-  ##Plugins
+##Plugins
   * Plugins can be added using
 
   ``` js
@@ -53,7 +59,7 @@ The backend will use the following technologies and frameworks:
   * Each object in the array must implement a 'register function' which will be called and supplied the current hapi server object (if using npm plugins they already have a register function)
   * Once all the plugins have been registered, the callback will execute.
 
-  ##Bell
+##Bell
 
   * Bell handles all web flow required by OAuth for 3rd party authentication and will only call the associated hapi handler function when the user has been successfully authenticated by the provider.
   * bell does not have any way of storing a user session so once the single request has been authenticated by the provider, the authentication will be lost for follow up request.
@@ -62,7 +68,8 @@ The backend will use the following technologies and frameworks:
 
   [OAuth Web Application flow with Github](https://developer.github.com/v3/oauth/)
 
-  ##Hapi Auth Cookie
+##Hapi Auth Cookie
+
   * hapi-auth-cookie provides an api to get and set encrypted cookies
   * It extends the hapi request object by adding a session object (`request.auth.session`) and associated methods
 
@@ -72,7 +79,7 @@ The backend will use the following technologies and frameworks:
 
   ```
 
-  ##Authentication strategies
+##Authentication strategies
 
   Both bell and hapi-auth-cookie register new schemes using the hapi method server.auth.scheme. This creates the ‘bell’ and ‘cookie’ schemes which we can use to create authentication strategies.
 
@@ -100,7 +107,7 @@ The backend will use the following technologies and frameworks:
 
   * The parameter isSecure defaults to true and this means that this cookie will only be transmitted over HTTPS connections.
 
-  ### Config parameter
+### Config parameter
 
   * Parameter of the router
   * can set authentication using the `config.auth` property
@@ -120,7 +127,7 @@ The backend will use the following technologies and frameworks:
 
   ```
 
-  #### Auth properties
+#### Auth properties
 
   If a route has the auth property set to one of the authentication strategies. The handler function is executed only if the authentication is successful.
 
