@@ -36,8 +36,7 @@ We'll be using:
   * Bell to do the OAuth authentication with the provider
   * hapi-auth-cookie to save the user’s profile information into an encrypted cookie which can be used throughout the rest of the application to determine the authentication status.
 
-Follow each step of the tutorial in the Tutorial Folder to build up your auth code. Step 3 contains the full code for authentication. 
-
+Follow each step of the folders labelled step1, step2 and step3 to build up your auth code. Step 3 contains the full code for authentication.
 
 ##Endpoints
 
@@ -45,7 +44,6 @@ Follow each step of the tutorial in the Tutorial Folder to build up your auth co
   * /login  - authenticates with 3rd party provider
   * /account - can only be accessed if authenticated
   * /logout - clears session authentication
-
 
 ##Plugins
   * Plugins can be added using
