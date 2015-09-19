@@ -1,51 +1,66 @@
 # Authentication
-This is a readme designed to inform the FAC5 course about authentication issues associated with web design and development, as well as a working example of authentication that uses GitHub's API on a HAPI framework.
+In this tutorial you'll learn how to implement authentication using GitHub's API with a Hapi NodeJS backend.
 
-###Map
+### Reasons to authenticate
 
-  - Reasons to authenticate
-  - Authentication schemes
-  - Using authentication with HAPI
+Any website or application that restricts access to some portion of its public resources is likely to need a secure form of authentication to identify individual users and control their access to resources stored on the server.
 
-## Reasons to authenticate
-
-Any website or application that restricts access to some portion of its public resources is likely to need a secure form of authentication to identify individual users and control their access to resources stored on the server. In most cases, users are also interested in restricting access to information that they store on the server.
-
-## Authentication schemes
+### Authentication schemes
 
 There are two primary authentication schemes, [Open ID](https://en.wikipedia.org/wiki/OpenID) and [OAuth2](https://en.wikipedia.org/wiki/OAuth). Open ID is built on top of the OAuth scheme, allowing trusted entities (websites) to provide assurance of a given person's identity. OAuth works by exchanging tokens between a server and a client. The important idea in OAuth is that a single entity (say, Google) can operate as both an identity authenticator as well as a resource provider. In this way, resource provision is always subsidiary to the initial exchange that confirms the identity of a person (usually via user id/password combinations). Identity confirmation results in the issuing of an access token with specific scope (often limiting access to files, as well as having some form of time limitation) that can be revoked by the issuing authority.
 
 One important thing to note about authentication it is very difficult to improvise or improve upon the standards that are described in OAuth. Furthermore, there are many ways to accidentally render a site insecure through such improvisation. Therefore attempting to create authorisation frameworks, processes and standards from scratch is a good way to compromise your server, users, or both.
 
-## Using authentication with HAPI
+# Set up authentication for a Node HapiJS project
 
-HAPI does not contain authentication as standard, but it does have a number of modules to enable web developers to implement authentication that are well tested and versatile.
+HapiJS does not contain authentication as standard, but it does have a number of modules to enable web developers to implement authentication that are well tested and versatile.
 
-# Dependencies
+### Dependencies
 
-The backend will use the following technologies and frameworks:
+We'll be using two node modules:
 
-  - [NodeJS](http://nodejs.org/)
-  - [Node-HapiJS](https://github.com/hapijs/hapi)
-  - [Node-Bell](https://github.com/hapijs/bell)
+  * [Node-Bell](https://github.com/hapijs/bell) to do the OAuth authentication with the provider (e.g. Github, Google, FB)
+    * Bell handles all web flow required by OAuth for 3rd party authentication and will only call the associated hapi handler function when the user has been successfully authenticated by the provider.
+    * bell does not have any way of storing a user session so once the single request has been authenticated by the provider, the authentication will be lost for follow up request.
 
-##Tutorial!
+    We need a way to create a secure cookie that holds the OAuth session information and can be used to authenticate future requests in the application.
 
-We'll be using:
+    [OAuth Web Application flow with Github](https://developer.github.com/v3/oauth/)
 
-  * Bell to do the OAuth authentication with the provider
-  * hapi-auth-cookie to save the user’s profile information into an encrypted cookie which can be used throughout the rest of the application to determine the authentication status.
+  * [hapi-auth-cookie](https://github.com/hapijs/hapi-auth-cookie) to save the user’s profile information into an encrypted cookie which can be used throughout the rest of the application to determine the authentication status.
+    * hapi-auth-cookie provides an api to get and set encrypted cookies
+    * It extends the hapi request object by adding a session object (`request.auth.session`) and associated methods
 
-Follow each step of the folders labelled step1, step2 and step3 to build up your auth code. Step 3 contains the full code for authentication.
+    ```js
+    request.auth.session.set(someCredentials); //setting secure cookie using credentials returned from 3rd party authentication
+    request.auth.session.clear(); //removing secure cookie
 
-##Endpoints
+    ```
 
-  * / - can be accessed with or without authentication
-  * /login  - authenticates with 3rd party provider
-  * /account - can only be accessed if authenticated
-  * /logout - clears session authentication
+### Endpoints
 
-##Plugins
+In the example project there are four endpoints to demonstrate the process of authentication on various pages of a website.
+
+  * */* - can be accessed with or without authentication (e.g home page)
+  * */login*  - authenticates with 3rd party provider
+  * */account* - can only be accessed if authenticated
+  * */logout* - clears session authentication
+
+### API Keys
+
+In order to authenticate with a 3rd party provider you'll need to get `CLIENTID` and `CLIENTSECRET` keys. If you're using GitHub this can be done by navigating to your settings and selecting 'applications' in the left hand navigation bar. Then click on 'Developer Applications' and finally 'Register a new application'. Give you application a name, add your application homepage url (e.g. 'http://localhost:8000') and an authorization callback URL ('http://loaclhost:8000/login'). Then click submit and you're all set up!
+
+## Tutorial
+
+Step 1: Set up the server and routes. Open up the step1_boilerplate folder.
+
+Step 2: Add Bell. Register Bell with the server and add a handler to set up authentication at the /login endpoint. Open up the step2_bell folder for the code. Add in your own clientId and clientSecret to the 'authOptions' object in the server.js file.
+
+Step 3: Add Hapi Auth Cookie. Register Hapi Auth Cookie with the server, and add handlers for the remaining routes. The complete code is in the step3_hapi_auth_cookie folder
+
+Each time we add a plugin (Bell and Hapi Auth Cookie) we need to register it with the server.
+
+### Plugins
   * Plugins can be added using
 
   ``` js
@@ -57,29 +72,9 @@ Follow each step of the folders labelled step1, step2 and step3 to build up your
   * Each object in the array must implement a 'register function' which will be called and supplied the current hapi server object (if using npm plugins they already have a register function)
   * Once all the plugins have been registered, the callback will execute.
 
-##Bell
+### Authentication strategies
 
-  * Bell handles all web flow required by OAuth for 3rd party authentication and will only call the associated hapi handler function when the user has been successfully authenticated by the provider.
-  * bell does not have any way of storing a user session so once the single request has been authenticated by the provider, the authentication will be lost for follow up request.
-
-  We need a way to create a secure cookie that holds the OAuth session information and can be used to authenticate future requests in the application.
-
-  [OAuth Web Application flow with Github](https://developer.github.com/v3/oauth/)
-
-##Hapi Auth Cookie
-
-  * hapi-auth-cookie provides an api to get and set encrypted cookies
-  * It extends the hapi request object by adding a session object (`request.auth.session`) and associated methods
-
-  ```js
-  request.auth.session.set(someCredentials); //setting secure cookie using credentials returned from 3rd party authentication
-  request.auth.session.clear(); //removing secure cookie
-
-  ```
-
-##Authentication strategies
-
-  Both bell and hapi-auth-cookie register new schemes using the hapi method server.auth.scheme. This creates the ‘bell’ and ‘cookie’ schemes which we can use to create authentication strategies.
+  Both bell and hapi-auth-cookie register new schemes using the hapi method `server.auth.scheme`. This creates the ‘bell’ and ‘cookie’ schemes which we can use to create authentication strategies.
 
   A strategy is a pre-configured instance of a scheme with an associated name.
 
